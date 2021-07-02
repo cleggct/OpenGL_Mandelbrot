@@ -2,13 +2,25 @@
 #include <GLFW\glfw3.h>
 #include <iostream>
 #include <Shader.h>
+#include <cmath>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void mouse_cursor_callback(GLFWwindow*, double xpos, double ypos);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
 
 //viewport/window dimensions
 const unsigned int WIDTH = 800;
 const unsigned int HEIGHT = 800;
+
+//input settings
+const double DRAG_SPEED = 1.0;
+const double ZOOM_SPEED = 0.2;
+
+//view settings
+float center_x = 0;
+float center_y = 0;
+float zoom = 1;
 
 int main()
 {
@@ -35,7 +47,7 @@ int main()
 	//-------------------------------------------
 	
 	//create the window
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Window", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Mandelbrot", NULL, NULL);
 
 	//if the window creation failed, send a message and terminate
 	if (window == NULL)
@@ -50,6 +62,12 @@ int main()
 
 	//set the resize callback function of the window
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+	//set the mouse cursor callback function
+	glfwSetCursorPosCallback(window, mouse_cursor_callback);
+
+	//set the scroll wheel callback function
+	glfwSetScrollCallback(window, scroll_callback);
 
 	//------------------------------------------
 	//initialize GLAD
@@ -80,10 +98,10 @@ int main()
 
 	//vertex data
 	const float vertices[] = {
-		 0.5f,  0.5f,  0.0f,
-		 0.5f, -0.5f,  0.0f,
-		-0.5f, -0.5f,  0.0f,
-		-0.5f,  0.5f,  0.0f,
+		 1.0f,  1.0f,  0.0f,
+		 1.0f, -1.0f,  0.0f,
+		-1.0f, -1.0f,  0.0f,
+		-1.0f,  1.0f,  0.0f,
 	};
 
 	//triangle vertex indices
@@ -128,17 +146,28 @@ int main()
 	//-------------------------------------------
 	//main render loop
 	//-------------------------------------------
+
+	//enable alpha blending
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glEnable(GL_BLEND);
+
 	while (!glfwWindowShouldClose(window))
 	{
 		//process input
 		processInput(window);
 
 		//set background color
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		//get uniform location
+		int settingsLocation = glGetUniformLocation(shaderProgram, "settings");
 
 		//activate the shader program
 		glUseProgram(shaderProgram);
+
+		//set uniform value
+		glUniform3f(settingsLocation, center_x, center_y, zoom);
 
 		//activate vertex array
 		glBindVertexArray(VAO);
@@ -170,6 +199,44 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	//resize the viewport to match the window
 	glViewport(0, 0, width, height);
+}
+
+//Mouse cursor callback function. Handles click-and-drag functionality.
+//@param window Pointer to the window to which the mouse is active.
+//@param xpos X coordinate of cursor.
+//@param ypos Y coordinate of cursor.
+void mouse_cursor_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	static bool mouse_down = false;
+	static double last_x = NULL;
+	static double last_y = NULL;
+
+	//do nothing if the left button is not being pressed.
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) {
+		last_x = NULL;
+		last_y = NULL;
+		return;
+	}
+
+	double corrected_x = xpos / WIDTH;
+	double corrected_y = ypos / HEIGHT;
+
+	//do nothing if the previous mouse location has not been set
+	if (!(last_x == NULL || last_y == NULL)) {
+		center_x += (last_x - corrected_x)/zoom*DRAG_SPEED;
+		center_y += (corrected_y - last_y)/zoom*DRAG_SPEED;
+	}
+	last_x = corrected_x;
+	last_y = corrected_y;
+}
+
+//Scroll wheel callback function. Handles zoom functionality.
+//@param window The currently active window.
+//@param xoffset The offset of the scroll wheel on the x axis. 0 for most mice.
+//@param yoffset The offset of the scroll wheel on the y axis.
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	zoom *= pow(2, yoffset*ZOOM_SPEED);
 }
 
 //This function is called whenever the window receives an input.
