@@ -5,35 +5,31 @@ out vec4 FragColor;
 
 void main()
 {
-    FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	float LIMIT = 100;
+	float THRESH = 5;
+	float inc = 1.0f/LIMIT;
 
-	float THRESH = 100.0f;
-	int LIMIT = 50;
-	float INC = 1.0f/LIMIT;
-	//int ITERATIONS = 100;
-	//float COLORS = 5;
+    //FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	
+	float a = ourPos.x;
+	float b = ourPos.y;
+	float a2 = a * a;
+	float b2 = b * b;
+	float d = (a + b) * (a + b);
 
-	vec2 num = vec2((ourPos.x*ourPos.x)-(ourPos.y*ourPos.y), 2*ourPos.x*ourPos.y);
-	num = vec2((num.x*num.x) - (num.y*num.y) + ourPos.x, (2*num.x*num.y) + ourPos.y);
+	float iterations = 0;
 
-	//for (int i = 0; i < ITERATIONS; ++i)
-	//{
-	//	num = vec2((num.x*num.x) - (num.y*num.y) + ourPos.x, (2*num.x*num.y) + ourPos.y);
-	//}
-
-	//float mag = length(num);
-	//float y = ceil(log2(1/mag));
-	//float val = mod(mag*(exp2(y)), COLORS)/COLORS;
-
-	//FragColor = vec4(0.0f, 0.0f, val, 1.0f);
-
-	int i = 0;
-
-	while((length(num) < THRESH) && (i < LIMIT))
+	while((a2 + b2 < THRESH) && (iterations < LIMIT))
 	{
-		i += 1;
-		//LIMIT *= 10;
-		num = vec2((num.x*num.x) - (num.y*num.y) + ourPos.x, (2*num.x*num.y) + ourPos.y);
-		FragColor = vec4(FragColor.x - INC, FragColor.y - INC, FragColor.z - INC, FragColor.w);
+		a = a2 - b2 + ourPos.x;
+		b = d - a2 - b2 + ourPos.y;
+		a2 = a * a;
+		b2 = b * b;
+		d = (a + b) * (a + b);
+
+		iterations += 1;
 	}
+
+	float intensity = 1.0f - iterations*inc;
+	FragColor = vec4(intensity, intensity, intensity, intensity);
 } 
