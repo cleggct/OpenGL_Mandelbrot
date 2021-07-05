@@ -30,6 +30,32 @@ void main()
 		iterations += 1;
 	}
 
-	float intensity = 1.0f - iterations*inc;
-	FragColor = vec4(intensity, intensity, intensity, intensity);
+	int thresh1 = 30;
+	int thresh2 = 90;
+
+	if (iterations <= thresh1)
+	{
+		float intensity = iterations/thresh1;
+		FragColor = vec4(intensity, intensity, 0.0f, 1.0f);
+	}
+	else if (thresh1 < iterations && iterations <= thresh2)
+	{
+		float val = mod(iterations, 2.0f);
+		if(val == 0.0f)
+		{
+			FragColor = vec4(1.0f, 1.0f, 0.0f, 1.0f);
+		}
+		else
+		{
+			FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		}
+	}
+	else
+	{
+		float intensity = 0.5*(iterations-thresh2)/(LIMIT-thresh2);
+		FragColor = vec4(1.0f-intensity+0.5, 1.0f-intensity+0.45, 0.0f, 1.0f);
+	}
+
+	//float intensity = 1.0f - iterations*inc;
+	//FragColor = vec4(intensity, intensity, intensity, intensity);
 } 

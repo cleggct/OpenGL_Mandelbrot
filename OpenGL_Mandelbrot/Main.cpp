@@ -14,7 +14,7 @@ const unsigned int WIDTH = 800;
 const unsigned int HEIGHT = 800;
 
 //input settings
-const double DRAG_SPEED = 1.0;
+const double DRAG_SPEED = 1.5;
 const double ZOOM_SPEED = 0.2;
 
 //view settings
@@ -98,10 +98,10 @@ int main()
 
 	//vertex data
 	const float vertices[] = {
-		 1.0f,  1.0f,  0.0f,
-		 1.0f, -1.0f,  0.0f,
-		-1.0f, -1.0f,  0.0f,
-		-1.0f,  1.0f,  0.0f,
+		 1.0f,  1.0f,
+		 1.0f, -1.0f,
+		-1.0f, -1.0f,
+		-1.0f,  1.0f
 	};
 
 	//triangle vertex indices
@@ -131,7 +131,7 @@ int main()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	//set the vertex attribute pointer(s) and enable the attribute(s)
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	//unbind vertex buffer object
