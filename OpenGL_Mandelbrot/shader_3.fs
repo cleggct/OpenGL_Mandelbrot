@@ -7,7 +7,6 @@ void main()
 {
 	float LIMIT = 100;
 	float THRESH = 5;
-	//float inc = 1.0f/LIMIT;
 	
 	float a = ourPos.x;
 	float b = ourPos.y;
@@ -27,28 +26,6 @@ void main()
 
 		iterations += 1;
 	}
-
-	//float val = d;
-
-	//float prime = 13;
-
-	//if(d < 1)
-	//{
-	//	val = val*pow(10, ceil(log(1/d)/log(10))+1);
-	//}
-
-	//float intensity = 1.0f - mod(val, prime)/prime;
-
-	//if(a2 + b2 >= THRESH)
-	//{
-	//	FragColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
-	//}
-	//else
-	//{
-	//	float val = a2 + b2;
-	//	float intensity = val*pow(exp(1), floor(log(1/val)));
-	//	FragColor = vec4(intensity, intensity, intensity, 1.0f);
-	//}
 
 	float val = sqrt(a2 + b2);
 	float intensity = val*pow(exp(1), floor(log(1/val)));
