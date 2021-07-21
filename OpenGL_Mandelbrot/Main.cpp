@@ -10,11 +10,11 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
 
 //viewport/window dimensions
-const unsigned int WIDTH = 800;
-const unsigned int HEIGHT = 800;
+unsigned int WIDTH = 800;
+unsigned int HEIGHT = 800;
 
 //input settings
-const double DRAG_SPEED = 1.5;
+const double DRAG_SPEED = 1.4;
 const double ZOOM_SPEED = 0.2;
 
 //view settings
@@ -48,6 +48,15 @@ int main()
 	
 	//create the window
 	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Mandelbrot", NULL, NULL);
+
+	//make it fullscreen
+	//WIDTH = 1920;
+	//HEIGHT = 1080;
+	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+	glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+	WIDTH = mode->width;
+	HEIGHT = mode->height;
 
 	//if the window creation failed, send a message and terminate
 	if (window == NULL)
@@ -88,7 +97,8 @@ int main()
 	//set up shader program
 	//-------------------------------------------
 
-	Shader shader("shader.vs", "shader.fs");
+	//here you can make different choices for the fragment shader
+	Shader shader("shader.vs", "shader_3.fs");
 
 	unsigned int shaderProgram = shader.ID;
 
@@ -160,13 +170,15 @@ int main()
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		//get uniform location
+		//get uniform locations
+		int dimsLocation = glGetUniformLocation(shaderProgram, "dims");
 		int settingsLocation = glGetUniformLocation(shaderProgram, "settings");
 
 		//activate the shader program
 		glUseProgram(shaderProgram);
 
-		//set uniform value
+		//set uniform values
+		glUniform2f(dimsLocation, WIDTH, HEIGHT);
 		glUniform3f(settingsLocation, center_x, center_y, zoom);
 
 		//activate vertex array
@@ -199,6 +211,9 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	//resize the viewport to match the window
 	glViewport(0, 0, width, height);
+	//update dimensions
+	WIDTH = width;
+	HEIGHT = height;
 }
 
 //Mouse cursor callback function. Handles click-and-drag functionality.
