@@ -5,7 +5,7 @@ out vec4 FragColor;
 
 void main()
 {
-	float LIMIT = 100;
+	float LIMIT = 300;
 	float THRESH = 5;
 	
 	float a = ourPos.x;
