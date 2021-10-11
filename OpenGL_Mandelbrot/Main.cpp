@@ -96,7 +96,15 @@ int main()
 	//-------------------------------------------
 
 	//here you can make different choices for the fragment shader
-	Shader shader("shader.vs", "shader_3.fs");
+	const std::string vs_source =
+#include "shader.vs"
+		;
+
+	const std::string fs_source =
+#include "shader_3.fs"
+		;
+
+	Shader shader(vs_source.c_str(), fs_source.c_str());
 
 	unsigned int shaderProgram = shader.ID;
 

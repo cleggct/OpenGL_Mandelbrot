@@ -15,44 +15,8 @@ program. The ID data member is set to the ID of the shader program.
 @param vertexPath The file path to the vertex shader code.
 @param fragmentPath The file path to the fragmnet shader code.
 */
-Shader::Shader(const char* vertexPath, const char* fragmentPath)
+Shader::Shader(const char* vs_source, const char* fs_source)
 {
-
-	//these strings will store the code for the vertex and fragment shaders
-	std::string vertexStr = "";
-	std::string fragmentStr = "";
-
-	//--------------------------------------------------------------------
-	//read shader code from the files
-	//--------------------------------------------------------------------
-	try
-	{
-		std::string line = "";
-
-		//vertex shader code
-		std::ifstream vertexFile(vertexPath);
-		while (std::getline(vertexFile, line))
-		{
-			vertexStr += line;
-			vertexStr.push_back('\n');
-		}
-
-		//fragment shader code
-		std::ifstream fragmentFile(fragmentPath);
-		while (std::getline(fragmentFile, line))
-		{
-			fragmentStr += line;
-			fragmentStr.push_back('\n');
-		}
-	}
-	catch (std::ifstream::failure e)
-	{
-		std::cout << "ERROR::SHADER::FILE_READ_ERROR" << std::endl;
-	}
-
-	//convert to C string
-	const char* vertexShaderSource = vertexStr.c_str();
-	const char* fragmentShaderSource = fragmentStr.c_str();
 
 	//--------------------------------------------------------------------
 	//compile shaders from code
@@ -62,7 +26,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
 	//attach vertex source to shader
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+	glShaderSource(vertexShader, 1, &vs_source, NULL);
 
 	//compile shader
 	glCompileShader(vertexShader);
@@ -84,7 +48,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
 	//attach fragment source to shader
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+	glShaderSource(fragmentShader, 1, &fs_source, NULL);
 
 	//compile shader
 	glCompileShader(fragmentShader);

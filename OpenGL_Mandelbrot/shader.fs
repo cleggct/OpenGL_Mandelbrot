@@ -1,3 +1,4 @@
+R""(
 #version 330 core
 in vec2 ourPos;
 
@@ -31,3 +32,4 @@ void main()
 	float intensity = 1.0f - iterations*inc;
 	FragColor = vec4(intensity, intensity, intensity, intensity);
 } 
+)""

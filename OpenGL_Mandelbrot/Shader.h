@@ -10,7 +10,7 @@ public:
 	unsigned int ID;
 
 	// constructor reads and builds the shader
-	Shader(const char* vertexPath, const char* fragmentPath);
+	Shader(const char* vs_source, const char* fs_source);
 	// use/activate the shader
 	void use();
 	// utility uniform functions

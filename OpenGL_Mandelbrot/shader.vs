@@ -1,3 +1,4 @@
+R""(
 #version 330 core
 
 
@@ -25,3 +26,4 @@ void main()
     gl_Position = vec4(aPos.x, aPos.y, 0.0f, 1.0f);
 	ourPos = vec2((x_pos/SCALE)+OFFSET_X, (y_pos/SCALE)+OFFSET_Y);
 }
+)""
