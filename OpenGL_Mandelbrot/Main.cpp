@@ -14,7 +14,8 @@ unsigned int WIDTH = 800;
 unsigned int HEIGHT = 800;
 
 //input settings
-const double DRAG_SPEED = 1.4;
+const double DRAG_SPEED = 1.4; //adjusts mouse-drag speed
+const double INC_SPEED = 0.025; //adjusts arrow key speed
 const double ZOOM_SPEED = 0.2;
 
 //view settings
@@ -24,6 +25,15 @@ float zoom = 1;
 
 int main()
 {
+
+	std::string resp1 = " ";
+	do {
+		std::cout << "Fullscreen? (y/n)\n";
+		std::getline(std::cin, resp1);
+	} while ((tolower(resp1[0]) != 'y') && (tolower(resp1[0]) != 'n'));
+
+	bool fullscreen = tolower(resp1[0]) == 'y' ? true : false;
+
 	//-------------------------------------------
 	//initialize GLFW
 	//-------------------------------------------
@@ -49,12 +59,16 @@ int main()
 	//create the window
 	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Mandelbrot", NULL, NULL);
 
-	//make it fullscreen
-	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-	glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
-	WIDTH = mode->width;
-	HEIGHT = mode->height;
+
+	//if the user requested full screen mode
+	if (fullscreen) {
+		//make it fullscreen
+		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+		glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+		WIDTH = mode->width;
+		HEIGHT = mode->height;
+	}
 
 	//if the window creation failed, send a message and terminate
 	if (window == NULL)
@@ -268,5 +282,39 @@ void processInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, true);
+	}
+
+	//if the z key is pressed then increase the zoom
+	if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
+	{
+		zoom *= pow(2, ZOOM_SPEED);
+	}
+
+	//if the x key is pressed then decrease the zoom
+	if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
+	{
+		zoom *= pow(2, -ZOOM_SPEED);
+	}
+
+
+	//adjust center of screen when arrow keys are pressed
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+	{
+		center_y += INC_SPEED / zoom;
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+	{
+		center_y -= INC_SPEED / zoom;
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+	{
+		center_x += INC_SPEED / zoom;
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+	{
+		center_x -= INC_SPEED / zoom;
 	}
 }
