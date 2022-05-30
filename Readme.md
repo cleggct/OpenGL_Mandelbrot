@@ -3,12 +3,12 @@ Displays an image of the Mandelbrot set rendered using OpenGL. Click and drag to
 
 Here are some screenshots taken from the program:
 
-![alt text](Screenshot from 2021-10-13 13-57-13.png)
+![alt text](https://github.com/cleggct/OpenGL_Mandelbrot/blob/master/Screenshot%20from%202021-10-13%2013-57-13.png)
 
-![alt text](Screenshot from 2021-10-13 14-02-42.png)
+![alt text](https://github.com/cleggct/OpenGL_Mandelbrot/blob/master/Screenshot%20from%202021-10-13%2014-02-42.png)
 
-![alt text](Screenshot from 2021-10-13 18-38-24.png)
+![alt text](https://github.com/cleggct/OpenGL_Mandelbrot/blob/master/Screenshot%20from%202021-10-13%2018-38-24.png)
 
-![alt text](Screenshot from 2021-10-13 18-40-20.png)
+![alt text](https://github.com/cleggct/OpenGL_Mandelbrot/blob/master/Screenshot%20from%202021-10-13%2018-40-20.png)
 
-![alt text](Screenshot from 2021-10-11 16-11-24.png)
+![alt text](https://github.com/cleggct/OpenGL_Mandelbrot/blob/master/Screenshot%20from%202021-10-11%2016-11-24.png)
